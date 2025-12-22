@@ -31,6 +31,14 @@
       justify-content: center;
     }
 
+<!-- moving text border -->
+<div class="border-ticker">
+  <div class="ticker top"><div class="track" id="track-top"></div></div>
+  <div class="ticker right"><div class="track" id="track-right"></div></div>
+  <div class="ticker bottom"><div class="track" id="track-bottom"></div></div>
+  <div class="ticker left"><div class="track" id="track-left"></div></div>
+</div>
+    
     main {
       text-align: center;
       max-width: 520px;
@@ -82,6 +90,95 @@
 .ig-link:hover {
   opacity: 0.85;
   transform: translateY(-1px);
+}
+    /* moving text border */
+.border-ticker {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* doesn't block clicks */
+  z-index: 5; /* above background, below any modals */
+}
+
+.ticker {
+  position: fixed;
+  overflow: hidden;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: rgba(234, 234, 234, 0.7);
+  background: rgba(10, 10, 10, 0.0);
+  mix-blend-mode: normal;
+}
+
+.ticker .track {
+  display: inline-flex;
+  gap: 1.25rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* thickness + padding of the border strips */
+.ticker.top,
+.ticker.bottom {
+  left: 0;
+  right: 0;
+  height: 28px;
+  padding: 6px 10px;
+}
+
+.ticker.left,
+.ticker.right {
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  padding: 10px 6px;
+}
+
+/* place each side */
+.ticker.top { top: 0; }
+.ticker.right { right: 0; }
+.ticker.bottom { bottom: 0; }
+.ticker.left { left: 0; }
+
+/* rotate vertical sides so text reads normally */
+.ticker.right .track {
+  transform-origin: top right;
+  transform: rotate(90deg);
+}
+
+.ticker.left .track {
+  transform-origin: bottom left;
+  transform: rotate(-90deg);
+}
+
+/* CLOCKWISE motion:
+   top: left -> right
+   right: top -> bottom
+   bottom: right -> left
+   left: bottom -> top
+*/
+@keyframes scroll-x-forward {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes scroll-x-backward {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+/* vertical uses same animation, because the track is rotated */
+.ticker.top .track {
+  animation: scroll-x-forward 18s linear infinite;
+}
+.ticker.right .track {
+  animation: scroll-x-forward 18s linear infinite;
+}
+.ticker.bottom .track {
+  animation: scroll-x-backward 18s linear infinite;
+}
+.ticker.left .track {
+  animation: scroll-x-backward 18s linear infinite;
 }
   </style>
 </head>
@@ -162,8 +259,30 @@
     </footer>
   </main>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+ <script>
+  // footer year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // song titles for moving border
+  const titles = [
+    "killthesun",
+    "t3ddyboi",
+    "ghost stories 98",
+    "saviour",
+    "water",
+    "fairmont freestyle",
+    "4ever"
+  ];
+
+  // build one long repeating line (repeat twice so animation loops cleanly)
+  const line = titles.join(" · ") + " · ";
+  const repeated = (line.repeat(12)).trim(); // adjust 12 if you want denser/sparser
+
+  // fill all four sides
+  document.getElementById("track-top").textContent = repeated + " " + repeated;
+  document.getElementById("track-right").textContent = repeated + " " + repeated;
+  document.getElementById("track-bottom").textContent = repeated + " " + repeated;
+  document.getElementById("track-left").textContent = repeated + " " + repeated;
+</script>
 </body>
 </html>
