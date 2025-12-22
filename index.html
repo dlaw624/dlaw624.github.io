@@ -68,6 +68,17 @@
       font-size: 0.75rem;
       color: var(--muted);
     }
+
+    .ig-link {
+  display: inline-block;
+  margin-top: 2rem;
+  color: var(--muted);
+  transition: opacity 0.2s ease;
+}
+
+.ig-link:hover {
+  opacity: 0.6;
+}
   </style>
 </head>
 <body>
@@ -87,7 +98,29 @@
     loading="lazy">
   </iframe>
 </div>
-
+<a
+  href="https://instagram.com/daezhen"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="instagram"
+  class="ig-link"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37a4 4 0 1 1-7.87 1.17"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+</a>
     <nav>
       <a href="#">music</a>
       <a href="#">about</a>
