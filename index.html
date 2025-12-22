@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>dae zhen</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --accent: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    main {
+      text-align: center;
+      max-width: 520px;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: lowercase;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      margin: 0 0.75rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    nav a:hover {
+      opacity: 0.6;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>dae zhen</h1>
+    <p>
+      songs in progress.<br />
+      fragments, feelings, and late nights.
+    </p>
+    <div class="spotify">
+  <iframe
+    style="border-radius:12px"
+    src="https://open.spotify.com/embed/artist/2DAlyzXQHghMi4v3bWQs8h"
+    width="100%"
+    height="352"
+    frameborder="0"
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy">
+  </iframe>
+</div>
+
+    <nav>
+      <a href="#">music</a>
+      <a href="#">about</a>
+      <a href="#">contact</a>
+    </nav>
+
+    <footer>
+      © <span id="year"></span> dae zhen
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
