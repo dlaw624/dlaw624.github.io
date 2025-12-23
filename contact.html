@@ -60,6 +60,8 @@
 (() => {
   const canvas = document.getElementById("c");
   const ctx = canvas.getContext("2d");
+  const bgImage = new Image();
+bgImage.src = "images/deer.png";
   const scoreEl = document.getElementById("score");
   const shotsEl = document.getElementById("shots");
   const statusEl = document.getElementById("status");
@@ -157,9 +159,8 @@
   function drawBackground() {
     ctx.clearRect(0,0,W,H);
 
- // solid black background
-ctx.fillStyle = "#000000";
-ctx.fillRect(0, 0, W, H);
+// draw deer background
+ctx.drawImage(bgImage, 0, 0, W, H);
 
     // playfield frame
     ctx.strokeStyle = "rgba(234,234,234,0.14)";
