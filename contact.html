@@ -6,6 +6,7 @@
   <title>about · dae zhen.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0a0a0a;--fg:#eaeaea;--muted:rgba(234,234,234,.65);--line:rgba(234,234,234,.14)}
@@ -21,8 +22,13 @@
     .title{letter-spacing:.14em;text-transform:lowercase;font-weight:300;opacity:.95;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
     .pill{font-size:12px;color:rgba(234,234,234,.7);border:1px solid rgba(234,234,234,.16);padding:6px 10px;border-radius:999px;letter-spacing:.1em;text-transform:lowercase}
     .hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .hud span{font-size:12px;letter-spacing:.12em;text-transform:lowercase;color:rgba(234,234,234,.75);
-      border:1px solid rgba(234,234,234,.14);padding:6px 10px;border-radius:999px;background:rgba(10,10,10,.35);backdrop-filter:blur(6px)}
+    .hud span {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: lowercase;
+  color: rgba(234,234,234,.85);
+}
     .hud b{color:rgba(234,234,234,.92);font-weight:600}
     a.back{color:rgba(234,234,234,.8);text-decoration:none;border:1px solid rgba(234,234,234,.16);padding:8px 10px;border-radius:999px;
       letter-spacing:.12em;text-transform:uppercase;font-size:12px}
@@ -39,7 +45,7 @@
 <body>
   <div class="glow"></div>
   <header>
-    <div class="title"><span>dae zhen.</span><span class="pill">bubble stage</span></div>
+    <div class="title"><span>dae zhen.</span></div>
     <div class="hud">
       <span>score: <b id="score">0</b></span>
       <span>shots: <b id="shots">0</b></span>
@@ -54,9 +60,6 @@
     </div>
   </div>
 
-  <div class="footer">
-    <div class="hint">mouse to aim · click / space to shoot · ← → fine aim · r to reset</div>
-  </div>
 
 <script>
 (() => {
@@ -276,7 +279,7 @@
     ctx.fillStyle = "rgba(234,234,234,0.35)";
     ctx.font = "12px Inter, system-ui, sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("an original bubble stage — dae zhen.", FIELD_LEFT-18, FIELD_BOTTOM+80);
+    
   }
 
   function step(){
