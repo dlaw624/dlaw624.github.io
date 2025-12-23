@@ -62,6 +62,11 @@
   const ctx = canvas.getContext("2d");
   const bgImage = new Image();
 bgImage.src = "images/deer.png";
+
+bgImage.onload = () => {
+  // once the image is ready, start the game loop
+  draw();
+};
   const scoreEl = document.getElementById("score");
   const shotsEl = document.getElementById("shots");
   const statusEl = document.getElementById("status");
@@ -155,13 +160,17 @@ bgImage.src = "images/deer.png";
 
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 
-  function drawBackground() {
-    ctx.clearRect(0,0,W,H);
 
 // draw deer background
 function drawBackground() {
   ctx.clearRect(0, 0, W, H);
+  
+  // fallback so it never goes blank
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, W, H);
 
+  // don’t try to draw until the image is actually loaded
+  if (!bgImage.complete || !bgImage.naturalWidth) return;
   const imgRatio = bgImage.width / bgImage.height;
   const canvasRatio = W / H;
 
