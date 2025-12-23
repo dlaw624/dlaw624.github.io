@@ -3,41 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>about · dae zhen.</title>
+  <title>contact · dae zhen.</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
-    :root{--bg:#000000;--fg:#eaeaea;--muted:rgba(234,234,234,.65);--line:rgba(234,234,234,.14)}
+    :root{
+      --bg:#000000;
+      --fg:#eaeaea;
+      --muted:rgba(234,234,234,.65);
+      --line:rgba(234,234,234,.14);
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow:hidden}
-   .glow { display: none; }
-    header{position:fixed;top:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:3;
-      background:linear-gradient(to bottom, rgba(10,10,10,.92), rgba(10,10,10,0))}
-    .title{letter-spacing:.14em;text-transform:lowercase;font-weight:300;opacity:.95;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-    .pill{font-size:12px;color:rgba(234,234,234,.7);border:1px solid rgba(234,234,234,.16);padding:6px 10px;border-radius:999px;letter-spacing:.1em;text-transform:lowercase}
-    .hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .hud span {
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: lowercase;
-  color: rgba(234,234,234,.85);
-}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--fg);
+      min-height:100vh;
+      overflow:hidden;
+    }
+
+    header{
+      position:fixed;top:0;left:0;right:0;
+      padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      z-index:3;
+      background:linear-gradient(to bottom, rgba(0,0,0,.92), rgba(0,0,0,0));
+    }
+
+    .title{
+      letter-spacing:.14em;
+      text-transform:lowercase;
+      font-weight:300;
+      opacity:.95;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;
+    }
+
+    .hud{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;
+    }
+    .hud span{
+      font-family:"Press Start 2P", monospace;
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform: lowercase;
+      color: rgba(234,234,234,.85);
+    }
     .hud b{color:rgba(234,234,234,.92);font-weight:600}
-    a.back{color:rgba(234,234,234,.8);text-decoration:none;border:1px solid rgba(234,234,234,.16);padding:8px 10px;border-radius:999px;
-      letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+
+    a.back{
+      color:rgba(234,234,234,.8);
+      text-decoration:none;
+      border:1px solid rgba(234,234,234,.16);
+      padding:8px 10px;
+      border-radius:999px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px
+    }
     a.back:hover{opacity:.7}
-    .wrap{position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center;padding:72px 14px 18px}
-    .stage{width:min(410px,92vw);aspect-ratio:4/5;border:1px solid rgba(234,234,234,.14);border-radius:18px;background:rgba(10,10,10,.55);
-      backdrop-filter:blur(10px);box-shadow:0 30px 120px rgba(0,0,0,.55);overflow:hidden;position:relative}
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:72px 14px 18px;
+    }
+
+    /* NARROW STAGE, but NOT squished: the canvas matches the aspect ratio */
+    .stage{
+      width:min(410px,92vw);
+      aspect-ratio: 4/5;
+      border:1px solid rgba(234,234,234,.14);
+      border-radius:18px;
+      background:rgba(10,10,10,.55);
+      backdrop-filter:blur(10px);
+      box-shadow:0 30px 120px rgba(0,0,0,.55);
+      overflow:hidden;
+      position:relative;
+    }
+
     canvas{display:block;width:100%;height:100%}
-    .footer{position:fixed;bottom:0;left:0;right:0;padding:12px 14px 16px;display:flex;justify-content:center;z-index:3;gap:10px}
-    .hint{border:1px solid rgba(234,234,234,.14);border-radius:999px;padding:10px 12px;background:rgba(10,10,10,.35);backdrop-filter:blur(8px);
-      color:rgba(234,234,234,.6);letter-spacing:.08em;text-transform:lowercase;font-size:12px}
   </style>
 </head>
+
 <body>
   <header>
     <div class="title"><span>dae zhen.</span></div>
@@ -51,53 +108,53 @@
 
   <div class="wrap">
     <div class="stage">
+      <!-- This canvas size matches the stage aspect ratio (4/5) -->
       <canvas id="c" width="640" height="800"></canvas>
     </div>
   </div>
-
 
 <script>
 (() => {
   const canvas = document.getElementById("c");
   const ctx = canvas.getContext("2d");
-  const bgImage = new Image();
-bgImage.src = "images/deer.png";
 
-bgImage.onload = () => {
-  // once the image is ready, start the game loop
-  draw();
-};
   const scoreEl = document.getElementById("score");
   const shotsEl = document.getElementById("shots");
   const statusEl = document.getElementById("status");
 
+  const bgImage = new Image();
+  // your file path: /images/deer.png
+  bgImage.src = "images/deer.png";
+
   // --- game params ---
   const W = canvas.width, H = canvas.height;
+
   const R = 18;                 // bubble radius
   const GAP = 2;
   const STEP_X = (R*2 + GAP);
   const STEP_Y = Math.round((R*2 + GAP) * 0.86); // hex-ish vertical spacing
+
   const TOP_PAD = 70;
   const FIELD_TOP = TOP_PAD + 18;
   const FIELD_LEFT = 80;
   const FIELD_RIGHT = W - 80;
   const FIELD_BOTTOM = H - 120;
 
+  // softer “deer palette” colors
   const COLORS = [
-  { fill: "rgb(224, 108, 108)" },
-  { fill: "rgb(235, 204, 140)" },
-  { fill: "rgb(156, 198, 194)" },
-  { fill: "rgb(176, 154, 214)" },
-  { fill: "rgb(170, 196, 150)" }
-];
-  // song-title flair (purely cosmetic text flashes)
+    { fill: "rgb(224, 108, 108)" }, // soft red
+    { fill: "rgb(235, 204, 140)" }, // warm cream yellow
+    { fill: "rgb(156, 198, 194)" }, // muted teal
+    { fill: "rgb(176, 154, 214)" }, // dusty lavender
+    { fill: "rgb(170, 196, 150)" }  // sage green
+  ];
+
   const SONGS = ["killthesun","t3ddyboi","ghost stories 98","saviour","water","fairmont freestyle","4ever"];
 
   let score = 0;
   let shots = 0;
 
   // aim
-  let aimX = W/2, aimY = FIELD_BOTTOM;
   let aimAngle = -Math.PI/2;
   let fineAim = 0;
 
@@ -113,16 +170,13 @@ bgImage.onload = () => {
   let projectile = null;
 
   // grid (hex-ish)
-  // store bubbles as {x,y,colorIndex}
   const bubbles = [];
 
   function setStatus(t){ statusEl.textContent = t; }
+  function randColor(){ return Math.floor(Math.random() * COLORS.length); }
+  function updateHud(){ scoreEl.textContent = score; shotsEl.textContent = shots; }
 
-  function randColor() {
-    return Math.floor(Math.random() * COLORS.length);
-  }
-
-  function reset() {
+  function reset(){
     bubbles.length = 0;
     score = 0; shots = 0;
     shooter.curr = randColor();
@@ -133,22 +187,18 @@ bgImage.onload = () => {
     updateHud();
   }
 
-  function updateHud(){
-    scoreEl.textContent = score;
-    shotsEl.textContent = shots;
-  }
-
-  function seedCeiling() {
-    // create a starting ceiling with random bubbles
+  function seedCeiling(){
     const rows = 6;
     const cols = Math.floor((FIELD_RIGHT - FIELD_LEFT) / STEP_X);
+
     for(let row=0; row<rows; row++){
       for(let col=0; col<cols; col++){
         const offset = (row % 2) ? STEP_X/2 : 0;
         const x = FIELD_LEFT + col*STEP_X + offset;
         const y = FIELD_TOP + row*STEP_Y;
+
         if (x < FIELD_LEFT+R || x > FIELD_RIGHT-R) continue;
-        if (Math.random() < 0.92) {
+        if (Math.random() < 0.92){
           bubbles.push({x,y,c: randColor()});
         }
       }
@@ -156,54 +206,48 @@ bgImage.onload = () => {
   }
 
   // helpers
-  function dist(a,b,c,d){ const dx=a-c, dy=b-d; return Math.hypot(dx,dy); }
-
+  function dist(a,b,c,d){ return Math.hypot(a-c, b-d); }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 
-
-// draw deer background
-function drawBackground() {
-  ctx.clearRect(0, 0, W, H);
-  
-  // fallback so it never goes blank
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, W, H);
-
-  // don’t try to draw until the image is actually loaded
-  if (!bgImage.complete || !bgImage.naturalWidth) return;
-  const imgRatio = bgImage.width / bgImage.height;
-  const canvasRatio = W / H;
-
-  let drawW, drawH, offsetX, offsetY;
-
-  if (imgRatio > canvasRatio) {
-    // image is wider → crop sides
-    drawH = H;
-    drawW = H * imgRatio;
-    offsetX = (W - drawW) / 2;
-    offsetY = 0;
-  } else {
-    // image is taller → crop top/bottom
-    drawW = W;
-    drawH = W / imgRatio;
-    offsetX = 0;
-    offsetY = (H - drawH) / 2;
+  function roundRect(x,y,w,h,r){
+    const rr = Math.min(r,w/2,h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr,y);
+    ctx.arcTo(x+w,y,x+w,y+h,rr);
+    ctx.arcTo(x+w,y+h,x,y+h,rr);
+    ctx.arcTo(x,y+h,x,y,rr);
+    ctx.arcTo(x,y,x+w,y,rr);
+    ctx.closePath();
   }
 
-  ctx.drawImage(bgImage, offsetX, offsetY, drawW, drawH);
+  function drawBackground(){
+    ctx.clearRect(0,0,W,H);
 
-  // frame
-  ctx.strokeStyle = "rgba(234,234,234,0.14)";
-  ctx.lineWidth = 2;
-  roundRect(
-    FIELD_LEFT - 20,
-    FIELD_TOP - 20,
-    (FIELD_RIGHT - FIELD_LEFT) + 40,
-    (FIELD_BOTTOM - FIELD_TOP) + 40,
-    18
-  );
-  ctx.stroke();
-}
+    // fallback (never blank)
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,W,H);
+
+    // draw deer background if loaded
+    if (bgImage.complete && bgImage.naturalWidth){
+      const imgRatio = bgImage.width / bgImage.height;
+      const canvasRatio = W / H;
+
+      let drawW, drawH, offsetX, offsetY;
+
+      if (imgRatio > canvasRatio){
+        drawH = H;
+        drawW = H * imgRatio;
+        offsetX = (W - drawW) / 2;
+        offsetY = 0;
+      } else {
+        drawW = W;
+        drawH = W / imgRatio;
+        offsetX = 0;
+        offsetY = (H - drawH) / 2;
+      }
+
+      ctx.drawImage(bgImage, offsetX, offsetY, drawW, drawH);
+    }
 
     // playfield frame
     ctx.strokeStyle = "rgba(234,234,234,0.14)";
@@ -222,42 +266,39 @@ function drawBackground() {
     }
   }
 
-  function roundRect(x,y,w,h,r){
-    const rr = Math.min(r,w/2,h/2);
-    ctx.beginPath();
-    ctx.moveTo(x+rr,y);
-    ctx.arcTo(x+w,y,x+w,y+h,rr);
-    ctx.arcTo(x+w,y+h,x,y+h,rr);
-    ctx.arcTo(x,y+h,x,y,rr);
-    ctx.arcTo(x,y,x+w,y,rr);
-    ctx.closePath();
-  }
-
   function drawBubble(x,y,ci,alpha=1){
     const col = COLORS[ci].fill;
+
     ctx.save();
-    ctx.globalAlpha = alpha;
+
+    // make them more opaque overall
+    const bodyAlpha = alpha * 0.92;
+    const glowAlpha = alpha * 0.18;
+    const highlightAlpha = alpha * 0.18;
+
     // glow
+    ctx.globalAlpha = glowAlpha;
     ctx.beginPath();
-    ctx.arc(x,y,R+2,0,Math.PI*2);
+    ctx.arc(x,y,R+3,0,Math.PI*2);
     ctx.fillStyle = col;
-    ctx.globalAlpha = alpha*0.08;
     ctx.fill();
 
     // body
-    ctx.globalAlpha = alpha;
+    ctx.globalAlpha = bodyAlpha;
     ctx.beginPath();
     ctx.arc(x,y,R,0,Math.PI*2);
     ctx.fillStyle = col;
     ctx.fill();
 
     // highlight
+    ctx.globalAlpha = highlightAlpha;
     ctx.beginPath();
     ctx.arc(x-R*0.32, y-R*0.32, R*0.35, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(255,255,255,0.14)";
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
     ctx.fill();
 
     // rim
+    ctx.globalAlpha = alpha;
     ctx.lineWidth = 2;
     ctx.strokeStyle = "rgba(10,10,10,0.55)";
     ctx.stroke();
@@ -288,7 +329,7 @@ function drawBackground() {
 
     // current + next
     drawBubble(shooter.x, shooter.y, shooter.curr, 1);
-    drawBubble(shooter.x+64, shooter.y+22, shooter.next, 0.9);
+    drawBubble(shooter.x+64, shooter.y+22, shooter.next, 0.95);
 
     ctx.fillStyle = "rgba(234,234,234,0.55)";
     ctx.font = "12px Inter, system-ui, sans-serif";
@@ -299,23 +340,15 @@ function drawBackground() {
   function draw(){
     drawBackground();
 
-    // ceiling bubbles
     for(const b of bubbles){
       drawBubble(b.x,b.y,b.c,1);
     }
 
-    // projectile
     if(projectile){
       drawBubble(projectile.x, projectile.y, projectile.c, 1);
     }
 
     drawShooter();
-
-    // tiny footer label inside canvas
-    ctx.fillStyle = "rgba(234,234,234,0.35)";
-    ctx.font = "12px Inter, system-ui, sans-serif";
-    ctx.textAlign = "left";
-    
   }
 
   function step(){
@@ -353,7 +386,6 @@ function drawBackground() {
   }
 
   function stickProjectile(){
-    // place projectile onto nearest hex-ish snap point
     const p = projectile;
     projectile = null;
 
@@ -361,7 +393,6 @@ function drawBackground() {
     let best = null;
     let bestD = Infinity;
 
-    // search a reasonable row range based on y
     const approxRow = Math.round((p.y - FIELD_TOP)/STEP_Y);
     for(let r = Math.max(0, approxRow-4); r <= approxRow+4; r++){
       const offset = (r%2) ? STEP_X/2 : 0;
@@ -377,10 +408,8 @@ function drawBackground() {
       }
     }
 
-    // if somehow no best, just drop it
     const placed = {x: best?best.x:p.x, y: best?best.y:p.y, c: p.c};
 
-    // avoid exact overlap: if spot occupied, nudge search outward
     if(isOccupied(placed.x, placed.y)){
       const n = findNearestFree(placed.x, placed.y);
       placed.x = n.x; placed.y = n.y;
@@ -389,7 +418,6 @@ function drawBackground() {
     bubbles.push(placed);
     shots += 1;
 
-    // pop matches
     const popped = popMatchesFrom(placed);
     if(popped > 0){
       score += popped * 100;
@@ -398,14 +426,12 @@ function drawBackground() {
       setStatus("stick");
     }
 
-    // drop “floating” clusters not connected to top
     const dropped = dropFloaters();
     if(dropped > 0){
       score += dropped * 60;
       setStatus("drop");
     }
 
-    // rotate shooter colors
     shooter.curr = shooter.next;
     shooter.next = randColor();
 
@@ -420,7 +446,6 @@ function drawBackground() {
   }
 
   function findNearestFree(x,y){
-    // brute search near the same row/neighbor rows
     const cols = Math.floor((FIELD_RIGHT - FIELD_LEFT) / STEP_X);
     const baseRow = Math.round((y - FIELD_TOP)/STEP_Y);
     for(let ring=0; ring<8; ring++){
@@ -439,7 +464,6 @@ function drawBackground() {
   }
 
   function neighbors(ofB){
-    // neighbors are bubbles within ~2R
     const out = [];
     for(const b of bubbles){
       if(b === ofB) continue;
@@ -449,7 +473,6 @@ function drawBackground() {
   }
 
   function popMatchesFrom(start){
-    // BFS same color
     const target = start.c;
     const seen = new Set();
     const stack = [start];
@@ -471,7 +494,6 @@ function drawBackground() {
     }
 
     if(group.length >= 3){
-      // remove all in group
       for(const g of group){
         const idx = bubbles.indexOf(g);
         if(idx >= 0) bubbles.splice(idx,1);
@@ -482,9 +504,8 @@ function drawBackground() {
   }
 
   function dropFloaters(){
-    // mark bubbles connected to top boundary
     const connected = new Set();
-    const tops = bubbles.filter(b => b.y <= FIELD_TOP + 1); // top row
+    const tops = bubbles.filter(b => b.y <= FIELD_TOP + 1);
     const queue = [...tops];
 
     while(queue.length){
@@ -498,7 +519,6 @@ function drawBackground() {
       }
     }
 
-    // drop anything not connected
     let dropped = 0;
     for(let i=bubbles.length-1;i>=0;i--){
       const b = bubbles[i];
@@ -516,7 +536,7 @@ function drawBackground() {
   }
 
   function shoot(){
-    if(projectile) return; // one at a time
+    if(projectile) return;
     const speed = 10.6;
     projectile = {
       x: shooter.x,
@@ -532,25 +552,23 @@ function drawBackground() {
     const rect = canvas.getBoundingClientRect();
     const mx = (clientX - rect.left) * (W / rect.width);
     const my = (clientY - rect.top) * (H / rect.height);
-    aimX = mx; aimY = my;
 
     const dx = mx - shooter.x;
     const dy = my - shooter.y;
 
-    // constrain aim upward
     let ang = Math.atan2(dy, dx);
+
     const min = (-Math.PI + 0.35);
     const max = (-0.35);
-    // map to range around -PI/2
-    // ensure ang is between min..max (upward cone)
+
     ang = clamp(ang, min, max);
     aimAngle = ang + fineAim;
     aimAngle = clamp(aimAngle, min, max);
   }
 
-  // input
   canvas.addEventListener("mousemove", (e)=> updateAimFromPointer(e.clientX,e.clientY));
   canvas.addEventListener("click", ()=> shoot());
+
   window.addEventListener("keydown", (e)=>{
     if(e.key === " "){ e.preventDefault(); shoot(); }
     if(e.key === "ArrowLeft"){ fineAim -= 0.03; aimAngle -= 0.03; }
@@ -558,7 +576,6 @@ function drawBackground() {
     if(e.key.toLowerCase() === "r"){ reset(); }
   });
 
-  // kick off
   reset();
   step();
 })();
