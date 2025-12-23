@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0a0a0a;--fg:#eaeaea;--muted:rgba(234,234,234,.65);--line:rgba(234,234,234,.14)}
+    :root{--bg:#000000;--fg:#eaeaea;--muted:rgba(234,234,234,.65);--line:rgba(234,234,234,.14)}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow:hidden}
     .glow{position:fixed;inset:-20%;background:
@@ -162,12 +162,9 @@
   function drawBackground() {
     ctx.clearRect(0,0,W,H);
 
-    // soft vignette
-    const g = ctx.createRadialGradient(W/2,H/2,120,W/2,H/2,900);
-    g.addColorStop(0,"rgba(255,255,255,0.03)");
-    g.addColorStop(1,"rgba(0,0,0,0.62)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,W,H);
+ // solid black background
+ctx.fillStyle = "#000000";
+ctx.fillRect(0, 0, W, H);
 
     // playfield frame
     ctx.strokeStyle = "rgba(234,234,234,0.14)";
