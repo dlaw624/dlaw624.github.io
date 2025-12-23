@@ -30,7 +30,7 @@
       letter-spacing:.12em;text-transform:uppercase;font-size:12px}
     a.back:hover{opacity:.7}
     .wrap{position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center;padding:72px 14px 18px}
-    .stage{width:min(410px,92vw);aspect-ratio:16/10;border:1px solid rgba(234,234,234,.14);border-radius:18px;background:rgba(10,10,10,.55);
+    .stage{width:min(410px,92vw);aspect-ratio:4/5;border:1px solid rgba(234,234,234,.14);border-radius:18px;background:rgba(10,10,10,.55);
       backdrop-filter:blur(10px);box-shadow:0 30px 120px rgba(0,0,0,.55);overflow:hidden;position:relative}
     canvas{display:block;width:100%;height:100%}
     .footer{position:fixed;bottom:0;left:0;right:0;padding:12px 14px 16px;display:flex;justify-content:center;z-index:3;gap:10px}
@@ -159,7 +159,42 @@ bgImage.src = "images/deer.png";
     ctx.clearRect(0,0,W,H);
 
 // draw deer background
-ctx.drawImage(bgImage, 0, 0, W, H);
+function drawBackground() {
+  ctx.clearRect(0, 0, W, H);
+
+  const imgRatio = bgImage.width / bgImage.height;
+  const canvasRatio = W / H;
+
+  let drawW, drawH, offsetX, offsetY;
+
+  if (imgRatio > canvasRatio) {
+    // image is wider → crop sides
+    drawH = H;
+    drawW = H * imgRatio;
+    offsetX = (W - drawW) / 2;
+    offsetY = 0;
+  } else {
+    // image is taller → crop top/bottom
+    drawW = W;
+    drawH = W / imgRatio;
+    offsetX = 0;
+    offsetY = (H - drawH) / 2;
+  }
+
+  ctx.drawImage(bgImage, offsetX, offsetY, drawW, drawH);
+
+  // frame
+  ctx.strokeStyle = "rgba(234,234,234,0.14)";
+  ctx.lineWidth = 2;
+  roundRect(
+    FIELD_LEFT - 20,
+    FIELD_TOP - 20,
+    (FIELD_RIGHT - FIELD_LEFT) + 40,
+    (FIELD_BOTTOM - FIELD_TOP) + 40,
+    18
+  );
+  ctx.stroke();
+}
 
     // playfield frame
     ctx.strokeStyle = "rgba(234,234,234,0.14)";
