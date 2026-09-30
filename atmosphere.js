@@ -12,12 +12,13 @@
     if (canFade) {
       try { setupFades(); } catch (e) { root.classList.remove("fx"); }
     }
-    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) setupGlow();
+    // pages with their own light (the homepage torch) skip the glow
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !document.querySelector(".torch")) setupGlow();
   });
 
   // fade + slight rise as elements enter the viewport, once each
   function setupFades() {
-    var targets = document.querySelectorAll("main > *, .stage, img");
+    var targets = document.querySelectorAll("main > *, .stage, img:not(.hero-art)");
     var io = new IntersectionObserver(function (entries) {
       var batch = 0;
       entries.forEach(function (entry) {

@@ -54,7 +54,7 @@ html::after {
    once an element has faded in it gets .fx-done and drops back to its own styles. */
 html.fx main > *:not(.fx-done),
 html.fx .stage:not(.fx-done),
-html.fx img:not(.fx-done) {
+html.fx img:not(.fx-done):not(.hero-art) {
   opacity: 0;
   transform: translate3d(0, 14px, 0);
 }
@@ -68,4 +68,15 @@ html.fx .fx-in.fx-in:not(.fx-done) {
 @media (prefers-reduced-motion: reduce) {
   html::after { animation: none; }
   .fx-glow { display: none; }
+}
+
+/* slow cross-fade between pages (supported browsers only; others just navigate) */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.7s;
+    animation-timing-function: ease;
+  }
 }

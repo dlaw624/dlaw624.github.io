@@ -4,6 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>dae zhen</title>
+  <meta name="description" content="album in mixing." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <!-- share preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="dae zhen" />
+  <meta property="og:title" content="dae zhen" />
+  <meta property="og:description" content="album in mixing." />
+  <meta property="og:url" content="https://dae-zhen.com/" />
+  <meta property="og:image" content="https://dae-zhen.com/images/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="dae zhen playing guitar against a pale wall, black and white" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="dae zhen" />
+  <meta name="twitter:description" content="album in mixing." />
+  <meta name="twitter:image" content="https://dae-zhen.com/images/og.jpg" />
+  <meta name="twitter:image:alt" content="dae zhen playing guitar against a pale wall, black and white" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +46,7 @@
       color: var(--fg);
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -173,8 +193,9 @@
 }
 .ticker.left .track {
   animation: scroll-x-backward 150s linear infinite;
+}
 
-  .ask {
+.ask {
   margin-top: 2.5rem;
   margin-bottom: 3rem;
 }
@@ -183,12 +204,145 @@
   border-radius: 12px;
   border: 1px solid rgba(234, 234, 234, 0.12);
 }
+
+/* album hero: the art sits in darkness and a torch (cursor, or drifting light on touch)
+   reveals it; scrolling sinks it fully into shadow. see script below. */
+.hero {
+  position: relative;
+  align-self: stretch;
+  height: 180vh;
+  height: 180svh;
+}
+
+.hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.hero-stage picture,
+.hero-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-art {
+  object-fit: cover;
+  object-position: 50% 42%;
+  filter: grayscale(1) brightness(0.055);
+}
+
+/* the torch: a soft-edged disc moved with transforms. its inner layer is moved the
+   opposite way so the lit copy of the art stays lined up with the dark one. */
+.torch {
+  --torch: 420px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--torch);
+  height: var(--torch);
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.4) 55%, rgba(0, 0, 0, 0.12) 80%, rgba(0, 0, 0, 0) 100%);
+          mask-image: radial-gradient(circle closest-side, #000 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.4) 55%, rgba(0, 0, 0, 0.12) 80%, rgba(0, 0, 0, 0) 100%);
+  will-change: transform, opacity;
+}
+
+.torch-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  isolation: isolate;
+  will-change: transform;
+}
+
+.torch .hero-art {
+  filter: grayscale(1) brightness(0.6);
+}
+
+/* firelight: multiply a warm red into the lit art, plus a faint bloom */
+.torch-tint {
+  position: absolute;
+  inset: 0;
+  background: rgb(255, 128, 96);
+  mix-blend-mode: multiply;
+}
+
+.torch-bloom {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 60, 30, 0.07);
+  mix-blend-mode: screen;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .torch { --torch: 360px; }
+}
+
+/* twice the stage height: clear at the top, solid site-dark below; slid up by scroll */
+.hero-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200%;
+  background: linear-gradient(to bottom,
+    rgba(10, 10, 10, 0) 0%,
+    rgba(10, 10, 10, 0.35) 18%,
+    rgba(10, 10, 10, 0.85) 38%,
+    #0a0a0a 50%,
+    #0a0a0a 100%);
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* the song border waits until the hero is behind you */
+.border-ticker {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+body.past-hero .border-ticker {
+  opacity: 1;
 }
   </style>
   <link rel="stylesheet" href="/atmosphere.css">
   <script src="/atmosphere.js"></script>
 </head>
 <body>
+
+  <header class="hero">
+    <div class="hero-stage">
+      <picture>
+        <source srcset="/images/dog.webp" type="image/webp">
+        <img
+          class="hero-art"
+          src="/images/dog.jpg"
+          width="1080"
+          height="1080"
+          fetchpriority="high"
+          alt="dae zhen playing guitar in the dark, lit by a moving warm light">
+      </picture>
+      <div class="torch" aria-hidden="true">
+        <div class="torch-inner">
+          <picture>
+            <source srcset="/images/dog.webp" type="image/webp">
+            <img class="hero-art" src="/images/dog.jpg" width="1080" height="1080" alt="">
+          </picture>
+          <div class="torch-tint"></div>
+          <div class="torch-bloom"></div>
+        </div>
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+    </div>
+  </header>
 
   <!-- moving text border -->
 <div class="border-ticker">
@@ -206,7 +360,8 @@
     <div class="spotify">
   <iframe
     style="border-radius:12px"
-    src="https://open.spotify.com/embed/artist/2DAlyzXQHghMi4v3bWQs8h"
+    src="https://open.spotify.com/embed/artist/2DAlyzXQHghMi4v3bWQs8h?theme=0"
+    title="dae zhen on spotify"
     width="100%"
     height="352"
     frameborder="0"
@@ -235,6 +390,7 @@
   class="ig-link"
 >
   <svg
+    aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     width="22"
     height="22"
@@ -291,6 +447,120 @@
  <script>
   // footer year
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  // hero: slide the shade up over the art as you scroll through it
+  (function () {
+    var hero = document.querySelector(".hero");
+    var stage = hero.querySelector(".hero-stage");
+    var shade = hero.querySelector(".hero-shade");
+    var queued = false;
+
+    function update() {
+      queued = false;
+      var h = stage.offsetHeight;
+      var travel = hero.offsetHeight - h;
+      var p = Math.min(Math.max(-hero.getBoundingClientRect().top / travel, 0), 1);
+      shade.style.transform = "translate3d(0," + (1 - 2 * p) * h + "px,0)";
+      document.body.classList.toggle("past-hero", p >= 1);
+    }
+
+    function queue() {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }
+
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    update();
+  })();
+
+  // torch: warm light that follows the cursor (or drifts on its own on touch screens)
+  (function () {
+    var stage = document.querySelector(".hero-stage");
+    var torch = stage.querySelector(".torch");
+    var inner = torch.querySelector(".torch-inner");
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var cursor = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    var W, H, D, fx, fy;          // stage size, torch size, figure position
+    var x, y, tx, ty;             // current and target light position
+    var lastTouch = -Infinity;
+    var running = false;
+
+    // where the guitarist lands on screen, given object-fit: cover at 50% 42%
+    function measure() {
+      W = stage.clientWidth;
+      H = stage.clientHeight;
+      D = torch.offsetWidth;
+      inner.style.width = W + "px";
+      inner.style.height = H + "px";
+      var s = Math.max(W / 1080, H / 1080);
+      fx = (W - 1080 * s) * 0.5 + 530 * s;
+      fy = (H - 1080 * s) * 0.42 + 560 * s;
+    }
+
+    function place() {
+      var ox = x - D / 2, oy = y - D / 2;
+      torch.style.transform = "translate3d(" + ox + "px," + oy + "px,0)";
+      inner.style.transform = "translate3d(" + -ox + "px," + -oy + "px,0)";
+    }
+
+    measure();
+    x = tx = fx;
+    y = ty = fy;
+    place();
+
+    if (reduced) {
+      torch.style.opacity = 0.7;
+      window.addEventListener("resize", function () { measure(); x = fx; y = fy; place(); });
+      return;
+    }
+
+    function frame(now) {
+      var t = now / 1000;
+      var drifting = !cursor && now - lastTouch > 2500;
+      if (drifting) {
+        tx = fx + W * 0.32 * Math.sin(t * 0.11);
+        ty = fy + H * 0.28 * Math.sin(t * 0.16 + 1.3);
+      }
+      var k = drifting ? 0.02 : 0.12;
+      x += (tx - x) * k;
+      y += (ty - y) * k;
+      place();
+      // layered slow sines read as a flame breathing, not a strobe
+      torch.style.opacity = 0.9 + 0.05 * Math.sin(t * 1.7) + 0.03 * Math.sin(t * 4.3 + 1) + 0.02 * Math.sin(t * 9.1 + 2);
+
+      if (document.body.classList.contains("past-hero")) {
+        running = false;
+      } else {
+        requestAnimationFrame(frame);
+      }
+    }
+
+    function wake() {
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }
+
+    function aim(px, py) {
+      var r = stage.getBoundingClientRect();
+      tx = px - r.left;
+      ty = py - r.top;
+    }
+
+    if (cursor) {
+      document.addEventListener("mousemove", function (e) { aim(e.clientX, e.clientY); }, { passive: true });
+    } else {
+      var touch = function (e) {
+        aim(e.touches[0].clientX, e.touches[0].clientY);
+        lastTouch = performance.now();
+      };
+      stage.addEventListener("touchstart", touch, { passive: true });
+      stage.addEventListener("touchmove", touch, { passive: true });
+    }
+
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("resize", measure);
+    wake();
+  })();
 
   // song titles for moving border
   const titles = [
